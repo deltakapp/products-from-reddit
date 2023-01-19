@@ -1,0 +1,10 @@
+# Packaging
+venv/
+
+# Dev environment
+.vscode/
+.history/
+
+# Logs
+logs
+*.log
