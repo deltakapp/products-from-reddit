@@ -4,6 +4,7 @@ venv/
 # Dev environment
 .vscode/
 .history/
+.idea/
 
 # Logs
 logs
