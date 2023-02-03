@@ -1,20 +1,20 @@
 import click
 
 
-# Entry point for CLI
 @click.group()
 def cli():
+  """Entry point for CLI"""
   pass
 
-# stub of crawl command
-@click.group()
+@click.command()
 def crawl():
-  pass
+  """stub of crawl command"""
+  click.echo('crawl command called')
 
-# stub of scrape command
-@click.group()
+@click.command()
 def scrape():
-  pass
+  """stub of scrape command"""
+  click.echo('scrape command called')
 
 cli.add_command(crawl)
 cli.add_command(scrape)

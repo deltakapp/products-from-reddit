@@ -6,6 +6,10 @@ venv/
 .history/
 .idea/
 
+# Python cache and compile targets
+__pycache__/
+**.pyc
+
 # Logs
 logs
 *.log
