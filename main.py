@@ -1,10 +1,7 @@
 from datetime import datetime, timedelta
 
 import click
-import pandas as pd
-import requests
 
-import reddit_auth
 from crawl import full_crawl
 
 
@@ -14,21 +11,28 @@ def cli():
   pass
 
 @click.command()
-@click.option('--start', default = None, help = 'what past datetime to crawl posts (utc)')
-@click.option('--duration', default = None, help = 'the timedelta before present to crawl posts to')
-def crawl(start, duration):
+@click.option('--start', help = 'specify past timestamp to crawl posts to')
+def crawl(start):
   "Fetch posts within specified timeframe"
 
-  # generate start parameters if not specified
-  if not start:
-    if not duration:
-      duration = timedelta(days = 30, minutes = 10)
-    start = datetime.utcnow() - duration
+  if start:
 
-  start_time = start
-  print(start_time)
+    # Parse start option into datetime format
+    start = datetime.utcfromtimestamp(float(start))
 
-  full_crawl(start_time)
+    # Verify start is valid past datetime
+    if start >= datetime.utcnow():
+      click.echo("Error: start must be before present time")
+      return
+
+  else:
+    # Supply default start
+    # Note: click doesn't allow custom parameter types like datetime or timestamp
+    # without explicit implementation
+    start = (datetime.utcnow() - timedelta(days = 30, minutes = 10))
+
+  full_crawl(start)
+  click.echo("crawling complete")
 
 @click.command()
 def scrape():
