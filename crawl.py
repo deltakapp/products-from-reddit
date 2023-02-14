@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from os import makedirs, path
+from typing import Optional, Tuple
 
 import pandas as pd
 import requests
@@ -8,10 +9,17 @@ import reddit_auth
 
 TOKEN = reddit_auth.get_token()
 
-def fetch_posts(number:int = 3, page:str = None):
-  """fetches # of posts, starting at page reference"""
+def fetch_posts(post_quantity:int = 3, page:str = None) -> Tuple[pd.DataFrame, Optional[str]]:
+  """Fetches post_quantity of posts, starting at page reference.
 
-  params = {'limit': number}
+  Args:
+    number: Max number of posts to fetch from reddit API.
+    page: The string ID of the page to fetch from reddit API.
+
+  Returns: Dataframe of posts from the given page and the next_page ID if more posts exist on the next page.
+  """
+
+  params = {'limit': post_quantity}
   if page:
     params['after'] = page
 
@@ -35,8 +43,8 @@ def fetch_posts(number:int = 3, page:str = None):
 
 
 
-def save_posts_to_json(posts):
-  "writes posts to separate json files in data/ directory"
+def save_posts_to_json(posts: pd.DataFrame):
+  """Writes posts to separate json files in data/ directory."""
   
   if not path.exists("data"):
     makedirs("data")
@@ -49,27 +57,40 @@ def save_posts_to_json(posts):
 
 
 def full_crawl(start_time: datetime):
-  "fetches all posts within specified duration"
+  """Fetches all posts after specified datetime, saving posts to disk.
+  Excessive posts are saved, not trimmed."""
 
   posts = pd.DataFrame()
 
   fetched, next_page = fetch_posts(100)
   posts = fetched
 
-  # determine if crawling has completed entire duration
+  # Determine if crawling has completed entire duration
   last_index_time = datetime.utcfromtimestamp(fetched.iloc[-1]['created_utc'])
   incomplete = last_index_time >= start_time
 
   while incomplete and next_page:
-    # when listing is maxed out (usually close to 1000 posts) next_page = None
+    # When listing is maxed out (usually close to 1000 posts) next_page = None
     # so loop will break
     fetched, next_page = fetch_posts(100, next_page)
+
+    # Check if empty dataset has been fetched
+    if fetched.empty:
+      assert (
+        next_page is None
+      ), f"Fetching next_page {next_page} returned an empty dataframe." \
+        "This is unexpected behavior and might require debugging."
+
+      break
+
     posts = pd.concat([posts, fetched])
 
-    # determine if crawling has completed entire duration
+    # Determine if crawling has completed entire duration
     last_index_time = datetime.utcfromtimestamp(fetched.iloc[-1]['created_utc'])
     incomplete = last_index_time >= start_time
 
   save_posts_to_json(posts)
+
+  print(f'Crawled {len(posts)} posts')
 
   return 
