@@ -12,14 +12,15 @@ def cli():
 
 
 @click.command()
-@click.option("--start", help="specify past timestamp to crawl posts to")
+@click.option(
+    "--start",
+    help="specify past date to crawl posts to (YYYY-MM-DD)",
+    type=click.types.DateTime(),
+)
 def crawl(start):
-    "Fetch posts within specified timeframe"
+    """Fetch posts within specified timeframe."""
 
     if start:
-        # Parse start option into datetime format
-        start = datetime.utcfromtimestamp(float(start))
-
         # Verify start is valid past datetime
         if start >= datetime.utcnow():
             click.echo("Error: start must be before present time")
@@ -27,12 +28,12 @@ def crawl(start):
 
     else:
         # Supply default start
-        # Note: click doesn't allow custom parameter types like datetime or timestamp
-        # without explicit implementation
         start = datetime.utcnow() - timedelta(days=30, minutes=10)
 
+    click.echo(f"Crawling posts since {start}")
+
     full_crawl(start)
-    click.echo("crawling complete")
+    click.echo("Crawling complete")
 
 
 @click.command()

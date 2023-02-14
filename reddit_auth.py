@@ -13,7 +13,11 @@ def get_token():
     # HTTP headers
     auth = requests.auth.HTTPBasicAuth(CLIENT_ID, SECRET_KEY)
     headers = {"User-Agent": "ProductsFromReddit/0.0.1"}
-    data = {"grant_type": "password", "username": USERNAME, "password": PASSWORD}
+    data = {
+        "grant_type": "password",
+        "username": USERNAME,
+        "password": PASSWORD,
+    }
 
     # Send request for auth token
     res = requests.post(
