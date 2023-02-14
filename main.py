@@ -20,10 +20,6 @@ def crawl(start):
   """Fetch posts within specified timeframe."""
 
   if start:
-
-    # Parse start option into datetime format
-    start = datetime.fromisoformat(str(start))
-
     # Verify start is valid past datetime
     if start >= datetime.utcnow():
       click.echo("Error: start must be before present time")
