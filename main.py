@@ -13,7 +13,7 @@ def cli():
 @click.command()
 @click.option(
   '--start',
-   help = 'specify past date to crawl posts to (YYYY-MM-DD)',
+   help = 'specify past date to crawl posts to (YYYY-MM-DD) (UTC timezone)',
    type=click.types.DateTime(),
    )
 def crawl(start):

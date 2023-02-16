@@ -42,18 +42,15 @@ def fetch_posts(post_quantity:int = 3, page:str = None) -> Tuple[pd.DataFrame, O
   return posts, next_page
 
 
+def save_posts_to_pickle(posts: pd.DataFrame):
+  """Writes posts as a single dataframe in data/posts."""
 
-def save_posts_to_json(posts: pd.DataFrame):
-  """Writes posts to separate json files in data/ directory."""
-  
   if not path.exists("data"):
     makedirs("data")
 
-  for index, row in posts.iterrows():
-    post_id = row['id']
-    with open(f'data/{post_id}.json', "w") as outfile:
-      outfile.write(row.to_json())
+  file_name = "data/posts.pkl"
 
+  posts.to_pickle(file_name)
 
 
 def full_crawl(start_time: datetime):
@@ -89,8 +86,8 @@ def full_crawl(start_time: datetime):
     last_index_time = datetime.utcfromtimestamp(fetched.iloc[-1]['created_utc'])
     incomplete = last_index_time >= start_time
 
-  save_posts_to_json(posts)
+  save_posts_to_pickle(posts)
 
   print(f'Crawled {len(posts)} posts')
 
-  return 
+  return posts
