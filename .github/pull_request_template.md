@@ -16,7 +16,7 @@
 <!-- Check off criteria on the checklist or cross out the item if it doesn't apply. -->
 
 ### Core
-- [ ] Functionality for new code verified for: 
+- [ ] Functionality for new code verified for:
   - [ ] happy-path (expected scenarios)
   - [ ] non-happy-path (error handling scenarios)
 - [ ] All unit tests passing
