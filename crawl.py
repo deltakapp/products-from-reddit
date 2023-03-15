@@ -33,6 +33,9 @@ def fetch_posts(post_quantity:int = 3, page:str = None) -> Tuple[pd.DataFrame, O
     params = params
   )
 
+  if not res.ok:
+      raise Exception(f"API HTTP Error {res.status_code} Message: {res.reason}")
+  
   # Dump response data posts into dataframe for manipulation
   posts = pd.json_normalize(res.json()['data']['children'])
   posts.columns = posts.columns.str.replace('data.', '', regex=True)
@@ -53,14 +56,29 @@ def save_posts_to_pickle(posts: pd.DataFrame):
   posts.to_pickle(file_name)
 
 
+def save_posts_to_json(posts: pd.DataFrame):
+  """Writes posts to separate json files in data/ directory."""
+  if not path.exists("data"):
+    makedirs("data")
+
+  for index, row in posts.iterrows():
+    post_id = row["id"]
+    with open(f"data/{post_id}.json", "w") as outfile:
+      outfile.write(row.to_json())
+
+
 def full_crawl(start_time: datetime):
   """Fetches all posts after specified datetime, saving posts to disk.
   Excessive posts are saved, not trimmed."""
 
   posts = pd.DataFrame()
 
-  fetched, next_page = fetch_posts(100)
-  posts = fetched
+  try:
+    fetched, next_page = fetch_posts(100)
+  except Exception as e:
+    print(e)
+    return
+  # posts = fetched
 
   # Determine if crawling has completed entire duration
   last_index_time = datetime.utcfromtimestamp(fetched.iloc[-1]['created_utc'])
@@ -87,6 +105,7 @@ def full_crawl(start_time: datetime):
     incomplete = last_index_time >= start_time
 
   save_posts_to_pickle(posts)
+  save_posts_to_json(posts)
 
   print(f'Crawled {len(posts)} posts')
 

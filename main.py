@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 import click
 
 from crawl import full_crawl
+from scrape import scrape_posts
 
 
 @click.group()
@@ -13,7 +14,7 @@ def cli():
 @click.command()
 @click.option(
   '--start',
-   help = 'specify past date to crawl posts to (YYYY-MM-DD) (UTC timezone)',
+   help = 'specify past date to crawl posts to (YYYY-MM-DD)',
    type=click.types.DateTime(),
    )
 def crawl(start):
@@ -38,6 +39,9 @@ def crawl(start):
 def scrape():
   """stub of scrape command"""
   click.echo('scrape command called')
+
+  scrape_posts()
+
 
 cli.add_command(crawl)
 cli.add_command(scrape)
