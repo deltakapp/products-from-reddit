@@ -41,10 +41,10 @@ def fetch_posts(
         raise Exception(
             f"API HTTP Error {res.status_code} Message: {res.reason}"
         )
-  
+
     # Dump response data posts into dataframe for manipulation
-    posts = pd.json_normalize(res.json()['data']['children'])
-    posts.columns = posts.columns.str.replace('data.', '', regex=True)
+    posts = pd.json_normalize(res.json()["data"]["children"])
+    posts.columns = posts.columns.str.replace("data.", "", regex=True)
 
     next_page = res.json()["data"]["after"]
 

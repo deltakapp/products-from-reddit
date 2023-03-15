@@ -2,29 +2,32 @@ import pandas as pd
 
 
 def select_fields(posts: pd.DataFrame) -> pd.DataFrame:
-  """Remove irrelevant fields from items"""
+    """Remove irrelevant fields from items"""
 
-  filtered_posts = posts.filter(items=[
-    "id",
-    "title",
-    "url",
-    "link_flair_text",
-    # "selftext",
-    # "author_fullname",
-    # "name",
-    # "edited",
-    # "created",
-    # "author",
-    # "num_comments",
-    # "stickied",
-    # "created_utc",
-  ])
+    filtered_posts = posts.filter(
+        items=[
+            "id",
+            "title",
+            "url",
+            "link_flair_text",
+            # "selftext",
+            # "author_fullname",
+            # "name",
+            # "edited",
+            # "created",
+            # "author",
+            # "num_comments",
+            # "stickied",
+            # "created_utc",
+        ]
+    )
 
-  return filtered_posts
+    return filtered_posts
+
 
 # This set is a developer reference of which fields are returned
 # by the reddit API for posts ("kind": "t3") as of March 14, 2023
-#all_fields = {
+# all_fields = {
 #  "kind",
 #  "approved_at_utc",
 #  "subreddit",
@@ -129,4 +132,4 @@ def select_fields(posts: pd.DataFrame) -> pd.DataFrame:
 #  "media",
 #  "is_video",
 #  "author_cakeday"
-#}
+# }
