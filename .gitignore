@@ -2,6 +2,7 @@
 venv/
 
 # Dev environment
+.pre-commit-config.yaml
 .vscode/
 .history/
 .idea/
