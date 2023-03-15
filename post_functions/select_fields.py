@@ -10,7 +10,7 @@ def select_fields(posts: pd.DataFrame) -> pd.DataFrame:
             "title",
             "url",
             "link_flair_text",
-            # "selftext",
+            "selftext",
             # "author_fullname",
             # "name",
             # "edited",

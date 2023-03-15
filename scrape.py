@@ -1,6 +1,7 @@
 import pandas as pd
 
 import post_functions.dissect_title as dissect_title
+import post_functions.itemize as itemize
 import post_functions.pre_filter as pre_filter
 import post_functions.select_fields as select_fields
 
@@ -19,3 +20,6 @@ def scrape_posts(posts: pd.DataFrame = None):
 
     posts = dissect_title.dissect_title(posts)
     print(posts.head())
+
+    items = itemize.itemize(posts)
+    print(items.head())

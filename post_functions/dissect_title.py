@@ -32,7 +32,7 @@ def dissect_title(posts: pd.DataFrame) -> pd.DataFrame:
     )
     # 'location' column
     posts["location"] = posts["title"].str.extract(
-        r"^\[(.{3}(?:-..))\]",  # Regex: from start, 3 chars plus optional -..
+        r"^\[(.{3}(?:-..)?)\]",  # Regex: from start, 3 chars plus optional -..
         expand=False,
     )
 
